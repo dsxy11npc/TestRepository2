@@ -2,17 +2,23 @@ package control;
 
 import service.service;
 
-//与用户交互处理用户发送的cmd
-//然后将处理结果发送到service层进行响应处理
+/**
+ * 控制器类
+ */
 public class control {
+    /** 服务层实体对象 */
     private static service service_;
-
+    /** 初始化 */
     public control(service service){
         service_=service;
     }
 
-    //处理用户的请求并且发送到对应的service层
+    /** 处理用户的请求并且发送到对应的service层 */
     public String dealRequire(String command){
+        /*
+        用空格分隔字符串
+        根据不同指令对应不同service层函数
+         */
         String[] cmd=command.split(" ");
         if(cmd[0].equals("set")){
             if(cmd.length==3){

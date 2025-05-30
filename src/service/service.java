@@ -1,17 +1,23 @@
 package service;
 
-
 import tool.database;
 import tool.log;
 
-//从control获取指令然后进行业务处理
+/**
+ * 服务类
+ */
 public class service {
+    /** 工具层数据库 */
     private database database_;
-
+    /** 初始化 */
     public service(database database){
         database_=database;
     }
 
+    /**
+     * 响应各种指令方法
+     * 调用数据库控制存储
+     */
     public String toSet(String key,String value){
         database_.set(key,value);
         return "1";
@@ -37,7 +43,9 @@ public class service {
 
     public String toRange(String key,String start,String end){
         if(database_.isNumeric(start)&&database_.isNumeric(end)){
+            //判断range方法的边界条件
             if(Integer.parseInt(start)>Integer.parseInt(end)){
+                //记录日志
                 log.getLog().info("start must be less than end!");
                 return "start must be less than end!";
             }
@@ -45,7 +53,9 @@ public class service {
                 return database_.range(key,Integer.parseInt(start),Integer.parseInt(end));
         }
         else{
+            //记录日志
             log.getLog().info("Input is illegal(start and end must be integer)");
+            //range方法必须输入数字边界
             return "Input is illegal(start and end must be integer)";
         }
     }
@@ -79,7 +89,9 @@ public class service {
         return database_.hdel(key1,key2);
     }
 
-    //返回响应指令
+    /**
+     * 响应各种HELP指令
+     */
     public String toPing(){
         return "PONG";
     }
@@ -163,8 +175,9 @@ public class service {
                 
                 EXIT""";
     }
-
+    /** 指令不存在方法 */
     public String noCommand(){
+        //记录日志
         log.getLog().info("no this command!");
         return "no this command!";
     }
